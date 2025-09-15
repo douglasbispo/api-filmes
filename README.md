@@ -137,7 +137,7 @@ Body:
 }
 ```
 
-* Resposta esperada:
+> Resposta esperada:
 
 ```json
 {
