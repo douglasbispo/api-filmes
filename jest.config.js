@@ -13,7 +13,9 @@ module.exports = {
     "**/*.js",
     "!**/node_modules/**",
     "!**/tests/**",
-    "!**/config/**",
+    "!**/config/db.js",
     "!**/server.js",
+    "!**/jest.config.js",
+    "!**/eslint.config.mjs",
   ],
 };
