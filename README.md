@@ -147,3 +147,13 @@ Body:
   "ano": 1999
 }
 ```
+
+## Qualidade de Código e Testes
+
+Este projeto utiliza **GitHub Actions** para garantir a qualidade contínua do código.
+
+### Workflows:
+- **style-check**: verifica o estilo de código com ESLint.  
+- **test-coverage**: executa os testes com Jest e exige cobertura mínima de **90%**.
+
+As execuções automáticas ocorrem em cada `push` ou `pull request` na branch `main`.
