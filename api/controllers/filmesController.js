@@ -19,7 +19,25 @@ const postFilme = async (req, res, next) => {
   }
 };
 
+const deleteFilme = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+    if (Number.isNaN(id)) return res.status(400).json({ message: "ID inválido" });
+
+    const result = await filmesService.removerFilme(id);
+
+    if (!result.deleted) {
+      return res.status(404).json({ message: "Filme não encontrado" });
+    }
+    // 204 No Content
+    return res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getFilmes,
   postFilme,
+  deleteFilme,
 };

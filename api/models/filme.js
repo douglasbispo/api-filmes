@@ -31,6 +31,14 @@ const Filme = {
       callback
     );
   },
+
+  getById: (id, callback) => {
+    db.query("SELECT * FROM filmes WHERE id = ?", [id], callback);
+  },
+
+  deleteById: (id, callback) => {
+    db.query("DELETE FROM filmes WHERE id = ?", [id], callback);
+  },
 };
 
 module.exports = Filme;

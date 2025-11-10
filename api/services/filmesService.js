@@ -22,7 +22,20 @@ const criarFilme = (novoFilme) => {
   });
 };
 
+const removerFilme = (id) => {
+  return new Promise((resolve, reject) => {
+    Filme.deleteById(id, (err, result) => {
+      if (err) return reject(err);
+      if (!result || result.affectedRows === 0) {
+        return resolve({ deleted: false });
+      }
+      resolve({ deleted: true });
+    });
+  });
+};
+
 module.exports = {
   listarFilmes,
   criarFilme,
+  removerFilme,
 };
