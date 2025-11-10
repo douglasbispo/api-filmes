@@ -17,5 +17,6 @@ module.exports = {
     "!**/server.js",
     "!**/jest.config.js",
     "!**/eslint.config.mjs",
+    "!**/nodels/filmes.js",
   ],
 };

@@ -78,6 +78,23 @@ describe("API de Filmes - Testes de Erro", () => {
     filmesService.criarFilme = originalFunction; 
   });
 
+  test("POST /api/filmes → deve retornar 400 se o service falhar com erro de validação", async () => {
+    const validationError = new Error("Campos obrigatórios faltando");
+    validationError.status = 400; 
+
+    const originalFunction = filmesService.criarFilme;
+    filmesService.criarFilme = jest.fn(() => Promise.reject(validationError));
+
+    const res = await request(app)
+      .post("/api/filmes")
+      .send({
+        titulo: "Inception",
+      });
+
+    expect(res.statusCode).toBe(400);
+    filmesService.criarFilme = originalFunction;
+  });
+
   // Teste para GET
   test("GET /api/filmes → deve retornar 500 se o service de listar falhar", async () => {
     const originalFunction = filmesService.listarFilmes;
