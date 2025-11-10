@@ -18,6 +18,14 @@ app.use("/api/filmes", filmesRoutes);
 const errorHandler = require("./middleware/errorHandler");
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+/* app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
-});
+}); */
+
+// Só inicia o servidor se não for teste
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+}
+
+module.exports = app;
+
