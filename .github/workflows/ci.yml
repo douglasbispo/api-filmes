@@ -29,6 +29,21 @@ jobs:
     name: Verificar cobertura de testes
     runs-on: ubuntu-latest
     needs: style-check
+
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306:3306
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: filmesdb
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Checkout do código
         uses: actions/checkout@v4
@@ -40,6 +55,18 @@ jobs:
 
       - name: Instalar dependências
         run: npm install
+
+      - name: Definir variáveis de ambiente
+        run: |
+          echo "DB_HOST=127.0.0.1" >> $GITHUB_ENV
+          echo "DB_USER=root" >> $GITHUB_ENV
+          echo "DB_PASSWORD=root" >> $GITHUB_ENV
+          echo "DB_NAME=filmesdb" >> $GITHUB_ENV
+
+      - name: Aguardar inicialização do MySQL
+        run: |
+          echo "Aguardando MySQL iniciar..."
+          sleep 15
 
       - name: Executar testes com cobertura
         run: npm test -- --coverage --coverageThreshold='{"global":{"branches":90,"functions":90,"lines":90,"statements":90}}'
