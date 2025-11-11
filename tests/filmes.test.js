@@ -2,17 +2,25 @@ const request = require("supertest");
 const app = require("../server");
 const db = require("../config/db");
 const filmesService = require("../services/filmesService");
+const errorHandler = require("../middleware/errorHandler");
+const util = require("util");
+
+// promisify para deixar o código mais claro
+const queryAsync = util.promisify(db.query).bind(db);
 
 beforeAll(async () => {
   // limpa a tabela antes de começar
-  await new Promise((resolve, reject) => {
-    db.query("DELETE FROM filmes", (err) => (err ? reject(err) : resolve()));
-  });
+  await queryAsync("DELETE FROM filmes");
 });
 
 afterAll(async () => {
-  // fecha a conexão ao terminar os testes
+  // garante que a conexão será fechada
   db.end();
+});
+
+// restaura todos os mocks depois de cada teste
+afterEach(() => {
+  jest.restoreAllMocks();
 });
 
 describe("API de Filmes", () => {
@@ -59,10 +67,8 @@ describe("API de Filmes", () => {
 });
 
 describe("API de Filmes - Testes de Erro", () => {
-
   test("POST /api/filmes → deve retornar 500 se o service falhar", async () => {
-    const originalFunction = filmesService.criarFilme;
-    filmesService.criarFilme = jest.fn(() => Promise.reject(new Error("Erro de conexão simulado")));
+    jest.spyOn(filmesService, "criarFilme").mockRejectedValue(new Error("Erro de conexão simulado"));
 
     const res = await request(app)
       .post("/api/filmes")
@@ -74,16 +80,13 @@ describe("API de Filmes - Testes de Erro", () => {
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toHaveProperty("message", "Erro de conexão simulado");
-
-    filmesService.criarFilme = originalFunction; 
   });
 
   test("POST /api/filmes → deve retornar 400 se o service falhar com erro de validação", async () => {
     const validationError = new Error("Campos obrigatórios faltando");
-    validationError.status = 400; 
+    validationError.status = 400;
 
-    const originalFunction = filmesService.criarFilme;
-    filmesService.criarFilme = jest.fn(() => Promise.reject(validationError));
+    jest.spyOn(filmesService, "criarFilme").mockRejectedValue(validationError);
 
     const res = await request(app)
       .post("/api/filmes")
@@ -92,32 +95,83 @@ describe("API de Filmes - Testes de Erro", () => {
       });
 
     expect(res.statusCode).toBe(400);
-    filmesService.criarFilme = originalFunction;
+    expect(res.body).toHaveProperty("message", "Campos obrigatórios faltando");
   });
 
-  // Teste para GET
+  test("POST /api/filmes → deve retornar 401 se o service falhar com erro de autenticação", async () => {
+    const authError = new Error("Token inválido");
+    authError.status = 401;
+
+    jest.spyOn(filmesService, "criarFilme").mockRejectedValue(authError);
+
+    const res = await request(app)
+      .post("/api/filmes")
+      .send({
+        titulo: "Inception",
+        genero: "Sci-Fi",
+        ano: 2010,
+      });
+
+    expect(res.statusCode).toBe(401);
+    expect(res.body).toHaveProperty("message", "Token inválido");
+  });
+
   test("GET /api/filmes → deve retornar 500 se o service de listar falhar", async () => {
-    const originalFunction = filmesService.listarFilmes;
-    filmesService.listarFilmes = jest.fn(() => Promise.reject(new Error("Erro ao buscar no DB simulado")));
+    jest.spyOn(filmesService, "listarFilmes").mockRejectedValue(new Error("Erro ao buscar no DB simulado"));
 
     const res = await request(app).get("/api/filmes");
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toHaveProperty("message", "Erro ao buscar no DB simulado");
-    
-    filmesService.listarFilmes = originalFunction;
   });
 
-  // Teste para DELETE falhar (Cobre o catch do deleteFilme)
   test("DELETE /api/filmes/:id → deve retornar 500 se o service falhar", async () => {
-    const originalFunction = filmesService.removerFilme;
-    filmesService.removerFilme = jest.fn(() => Promise.reject(new Error("Erro ao deletar no DB simulado")));
+    jest.spyOn(filmesService, "removerFilme").mockRejectedValue(new Error("Erro ao deletar no DB simulado"));
 
     const res = await request(app).delete("/api/filmes/1");
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toHaveProperty("message", "Erro ao deletar no DB simulado");
-    
-    filmesService.removerFilme = originalFunction;
+  });
+});
+
+// testes unitários do middleware para aumentar cobertura de branches
+describe("Middleware - errorHandler", () => {
+  test("Deve retornar 500 quando err.status for undefined", () => {
+    const err = new Error("Erro genérico");
+    // err.status undefined
+
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    errorHandler(err, req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      status: "error",
+      message: "Erro genérico",
+    });
+  });
+
+  test("Deve retornar 500 e mensagem padrão quando err.message for undefined", () => {
+    const err = {}; // sem message e sem status
+    const req = {};
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    };
+    const next = jest.fn();
+
+    errorHandler(err, req, res, next);
+
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({
+      status: "error",
+      message: "Erro interno do servidor",
+    });
   });
 });

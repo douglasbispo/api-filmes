@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1762825106183" clover="3.2.0">
+  <project timestamp="1762825106184" name="All files">
+    <metrics statements="34" coveredstatements="34" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4" elements="46" coveredelements="46" complexity="0" loc="34" ncloc="34" packages="3" files="3" classes="3"/>
+    <package name="controllers">
+      <metrics statements="22" coveredstatements="22" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+      <file name="filmesController.js" path="C:\Users\Dbisp\Desktop\api-filmes\controllers\filmesController.js">
+        <metrics statements="22" coveredstatements="22" conditionals="4" coveredconditionals="4" methods="3" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="23" count="4" type="stmt"/>
+        <line num="24" count="4" type="stmt"/>
+        <line num="25" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="3" type="stmt"/>
+        <line num="29" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="middleware">
+      <metrics statements="5" coveredstatements="5" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+      <file name="errorHandler.js" path="C:\Users\Dbisp\Desktop\api-filmes\middleware\errorHandler.js">
+        <metrics statements="5" coveredstatements="5" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="7" type="stmt"/>
+        <line num="4" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="7" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="routes">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="filmesRoutes.js" path="C:\Users\Dbisp\Desktop\api-filmes\routes\filmesRoutes.js">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>

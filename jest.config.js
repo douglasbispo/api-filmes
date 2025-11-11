@@ -1,6 +1,20 @@
+// jest.config.js
 module.exports = {
   testEnvironment: "node",
-  collectCoverage: true,
+  coveragePathIgnorePatterns: [
+    "/node_modules/",
+    "/tests/",
+    "/config/",
+    "/server.js",
+    "/jest.config.js",
+    "/eslint.config.mjs",
+    "/coverage/" 
+  ],
+  collectCoverageFrom: [
+    "controllers/**/*.js",
+    "middleware/**/*.js",
+    "routes/**/*.js",
+  ],
   coverageThreshold: {
     global: {
       branches: 90,
@@ -9,14 +23,4 @@ module.exports = {
       statements: 90,
     },
   },
-  collectCoverageFrom: [
-    "**/*.js",
-    "!**/node_modules/**",
-    "!**/tests/**",
-    "!**/config/db.js",
-    "!**/server.js",
-    "!**/jest.config.js",
-    "!**/eslint.config.mjs",
-    "!**/nodels/filmes.js",
-  ],
 };

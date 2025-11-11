@@ -12,7 +12,10 @@ const listarFilmes = () => {
 const criarFilme = (novoFilme) => {
   return new Promise((resolve, reject) => {
     if (!novoFilme.titulo || !novoFilme.genero || !novoFilme.ano) {
-      return reject(new Error("Todos os campos (titulo, genero, ano) são obrigatórios"));
+
+      const err = new Error("Todos os campos (titulo, genero, ano) são obrigatórios");
+      err.status = 400;
+      return reject(err);
     }
 
     Filme.create(novoFilme, (err, result) => {

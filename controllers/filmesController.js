@@ -29,7 +29,6 @@ const deleteFilme = async (req, res, next) => {
     if (!result.deleted) {
       return res.status(404).json({ message: "Filme não encontrado" });
     }
-    // 204 No Content
     return res.status(204).send();
   } catch (err) {
     next(err);
