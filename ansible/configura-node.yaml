@@ -1,0 +1,48 @@
+- name: Configurar servidor para rodar API de filmes
+  hosts: api_servers
+  become: yes
+
+  tasks:
+    - name: Atualizar pacotes
+      apt:
+        update_cache: yes
+
+    - name: Instalar dependências necessárias
+      apt:
+        name:
+          - git
+          - curl
+        state: present
+
+    - name: Instalar Node.js 20
+      shell: |
+        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+        apt install -y nodejs
+      args:
+        executable: /bin/bash
+
+    - name: Instalar PM2 globalmente
+      npm:
+        name: pm2
+        global: yes
+        state: present
+
+    - name: Clonar ou atualizar repositório
+      git:
+        repo: "https://github.com/douglasbispo/api-filmes.git"
+        dest: /var/www/api-filmes
+        version: main
+        force: yes
+
+    - name: Instalar dependências do projeto
+      npm:
+        path: /var/www/api-filmes
+        state: present
+
+    - name: Iniciar API com PM2
+      shell: |
+        pm2 stop api-filmes || true
+        pm2 start server.js --name api-filmes
+        pm2 save
+      args:
+        chdir: /var/www/api-filmes
