@@ -3,23 +3,23 @@
   become: yes
 
   tasks:
-    - name: Atualizar pacotes
-      apt:
+    - name: Atualizar pacotes (Alpine)
+      apk:
         update_cache: yes
 
-    - name: Instalar dependências necessárias
-      apt:
+    - name: Instalar dependências necessárias (Alpine)
+      apk:
         name:
           - git
           - curl
         state: present
 
-    - name: Instalar Node.js 20
-      shell: |
-        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-        apt install -y nodejs
-      args:
-        executable: /bin/bash
+    - name: Instalar Node.js e npm (Alpine)
+      apk:
+        name:
+          - nodejs
+          - npm
+        state: present
 
     - name: Instalar PM2 globalmente
       npm:
