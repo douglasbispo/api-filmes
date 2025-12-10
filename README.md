@@ -148,6 +148,7 @@ Body:
 }
 ```
 
+---
 ## Qualidade de Código e Testes
 
 Este projeto utiliza **GitHub Actions** para garantir a qualidade contínua do código.
@@ -157,3 +158,20 @@ Este projeto utiliza **GitHub Actions** para garantir a qualidade contínua do c
 - **test-coverage**: executa os testes com Jest e exige cobertura mínima de **90%**.
 
 As execuções automáticas ocorrem em cada `push` ou `pull request` na branch `main`.
+
+---
+
+## Imagem Docker da Aplicação
+
+Como parte da atividade proposta, este projeto agora possui um workflow configurado para:
+
+- Construir automaticamente a imagem Docker da API;
+- Publicar a imagem no Docker Hub;
+- Verificar a imagem publicada após o deploy.
+
+A imagem está disponível no Docker Hub no link abaixo:
+
+🔗 **https://hub.docker.com/r/douglasdocker123sdsds/api-filmes**
+
+### Badge da imagem Docker
+[![Docker Image](https://badgen.net/badge/DockerHub/api-filmes/blue?icon=docker)](https://hub.docker.com/r/douglasdocker123sdsds/api-filmes)
